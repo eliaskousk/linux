@@ -7,3 +7,5 @@ disk1.img
 disk2.img
 core-image-minimal-*.ext4
 .modinst
+*.ext4
+*.img
