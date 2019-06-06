@@ -21,6 +21,14 @@ QEMU_OPTS = -kernel $(ZIMAGE) \
 	--append "root=/dev/vda console=hvc0" \
 	--display $(QEMU_DISPLAY) -s
 
+# KGDB/KDB: append above: 'kgdboc=hvc0 kgdbwait'
+# https://www.kernel.org/doc/html/v4.15/dev-tools/kgdb.html
+# http://oliveryang.net/2015/08/using-kgdb-debug-linux-kernel-1/
+# - kgdboc command line arg doesn't work possibly due to console being on hvc0 which is virtio console
+# - so we need to set hvc0 after boot in /sys/module/kgdboc/parameters/kgdboc
+# - we then use Ctrl + O g to drop in kgdb/kdb (sysrq + g)
+# - the last kgdbwait is optional, used if we want for early boot time debug
+
 #boot: .modinst tap0 tap1 pipe1.in pipe1.out pipe2.in pipe2.out disk1.img disk2.img nttcp-run
 boot:	.modinst
 	ARCH=$(ARCH) qemu/qemu.sh $(QEMU_OPTS)
